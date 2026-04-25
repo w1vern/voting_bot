@@ -22,19 +22,33 @@ logger = setup_logger(__name__)
 router = Router()
 
 
+# @router.message(
+#     Command("poll"),
+#     F.chat.type.in_({ChatType.GROUP, ChatType.SUPERGROUP})
+# )
+# async def create_poll(message: Message, bot: Bot) -> None:
+#     await bot.send_poll(
+#         chat_id=message.chat.id,
+#         question="?",
+#         options=[InputPollOption(text=str(i)) for i in range(1, 11)],
+#         is_anonymous=False,
+#         type="regular",
+#         allows_multiple_answers=False,
+#         message_thread_id=message.message_thread_id,
+#     )
+
+
 @router.message(
-    Command("poll"),
-    F.chat.type.in_({ChatType.GROUP, ChatType.SUPERGROUP})
+    F.chat.type.in_({ChatType.GROUP, ChatType.SUPERGROUP}),
+    F.text.contains("make-poll"),
 )
-async def create_poll(message: Message, bot: Bot) -> None:
-    await bot.send_poll(
-        chat_id=message.chat.id,
+async def create_poll_on_keyword(message: Message) -> None:
+    await message.reply_poll(
         question="?",
         options=[InputPollOption(text=str(i)) for i in range(1, 11)],
         is_anonymous=False,
         type="regular",
         allows_multiple_answers=False,
-        message_thread_id=message.message_thread_id,
     )
 
 
